@@ -2008,7 +2008,7 @@ module ELoot # Sets Inventory
       Lich::Util.quiet_command_xml("push my #{sheath_name}", /You reach down|I'm afraid that you can't pull that/, /<prompt/, true, 2, true)
     end
   end
-  
+
   def self.find_sheathes_skin
     return unless ELoot.data.settings[:skin_enable]
 
