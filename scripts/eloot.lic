@@ -3984,7 +3984,7 @@ module ELoot # Gem and Reagent hording
       # Refresh the cache because lockers are special
       ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
 
-      jar = ELoot.data.stash.contents.find { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && Horde.normalize_name(obj.after_name) =~ /\b#{name}\b/ }
+      jar = ELoot.data.stash.contents.find { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && obj.after_name =~ /\b#{name}\b/ }
 
       return if jar.nil?
 
@@ -4004,7 +4004,9 @@ module ELoot # Gem and Reagent hording
       Horde.check_jar(name)
 
       # Need to refresh the locker contents because lockers are special
-      ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
+      if ELoot.time_between(:horde_check, 15)
+        ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
+      end
 
       Inventory.store_item(ELoot.data.stash, jar)
     end
@@ -4100,7 +4102,7 @@ module ELoot # Gem and Reagent hording
       full_jars = []
       ELoot.data.items_to_horde.uniq.each do |item|
         jar = nil
-        item_name = Horde.normalize_name(item)
+        item_name = Horde.normalize_name(item.name)
         next if full_jars.include?(item_name)
         if ELoot.data.inventory.find { |thing| thing[:item] == item_name }[:full]
           full_jars << item_name
@@ -4124,7 +4126,7 @@ module ELoot # Gem and Reagent hording
         first_name = items_to_horde.first.instance_variable_get(:@name)
         look_for = Horde.normalize_name(first_name)
 
-        bottle = ELoot.data.stash.contents.find { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && Horde.normalize_name(obj.after_name) =~ /\b#{look_for}\b/ }
+        bottle = ELoot.data.stash.contents.find { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && obj.after_name =~ /\b#{look_for}\b/ }
 
         empty = ELoot.data.stash.contents.find { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && obj.after_name.nil? }
 
@@ -4179,7 +4181,9 @@ module ELoot # Gem and Reagent hording
         Horde.check_jar(thing_name)
 
         # Need to refresh the locker contents because lockers are special
-        ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
+        if ELoot.time_between(:horde_check, 15)
+          ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
+        end
 
         Inventory.store_item(ELoot.data.stash, jar)
       end
