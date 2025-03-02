@@ -1834,7 +1834,7 @@ module ELoot # Profile loading/saving and settings
     }
   end
 
-  def self.save_profile(name: Char.name, silent: false)
+  def self.save_profile(silent: false)
     filename = "#{$data_dir}#{XMLData.game}/#{Char.name}/eloot.yaml"
     File.write(filename, ELoot.data.settings.to_yaml)
     ELoot.msg(type: "info", text: " Settings saved to file: #{filename}.") unless silent
@@ -2079,7 +2079,6 @@ module ELoot # Sets Inventory
     ELoot.find_sheathes_skin
 
     # Make sure the bags are open and contents available
-    all_contents = []
     all_bags = ELoot.data.sacks.merge(ELoot.data.ready_list)
 
     all_bags.values.uniq.compact.each do |item|
@@ -3737,7 +3736,6 @@ module ELoot # Gem and Reagent hording
       ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
       total_items = ELoot.data.stash.contents.count { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && !obj.after_name.nil? }
       empty_jars = ELoot.data.stash.contents.count { |obj| obj.noun =~ /^(?:jar|bottle|beaker)$/ && obj.after_name.nil? }
-
 
       if empty_jars.positive?
         ELoot.data.inventory << { :item => '*** empty jars ***', :count => empty_jars, :full => '  -' }
