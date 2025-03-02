@@ -24,6 +24,7 @@
     - bugfix when emptying jars to add to empty jar count
     - bugfix in store_item when gem hording
     - bugfix in container_contents causing false positives
+    - bugfix for weapon displayer
     - broke up the set_inventory method into smaller sections
   v2.2.2  (2025-02-28)
     - bugfix in Region.in_region for HW/Cold River
@@ -3065,7 +3066,7 @@ module ELoot # Inventory methods
 
       wait_time.times {
         return true if GameObj.containers.keys.include?(container.id) && container.contents.is_a?(Array)
-        return true if lines.any? { |l| l =~ /You glance|There is nothing|stuffed with a variety of shredded up paper and cloth|Looking at the .*?, you notice:/i }
+        return true if lines.any? { |l| l =~ /The wide leather belt|You glance|There is nothing|stuffed with a variety of shredded up paper and cloth|Looking at the .*?, you notice:/i }
         sleep 0.1
       }
       echo "This failed the second time. | Container: #{container.inspect} | calller: #{caller[0]}"
@@ -3260,7 +3261,7 @@ module ELoot # Inventory methods
 
       # check out whats inside
       lines = ELoot.get_command("look in ##{container.id}", ELoot.data.look_regex, silent: true, quiet: true)
-      return if lines.any? { |l| l =~ /You glance|There is nothing|stuffed with a variety of shredded up paper and cloth|Looking at the .*?, you notice:/i }
+      return if lines.any? { |l| l =~ /The wide leather belt|You glance|There is nothing|stuffed with a variety of shredded up paper and cloth|Looking at the .*?, you notice:/i }
 
       # Makes sure the item's contents are available
       Inventory.container_contents(container)
