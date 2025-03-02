@@ -1974,7 +1974,7 @@ module ELoot # Sets Inventory
       if (container = GameObj.inv.find { |i| i.name =~ /\b#{container_name}\b/i })
         ELoot.data.sacks[container_name] = container
       end
-      
+
       if key != :appraisal_container && ELoot.data.settings[:sell_container].include?("overflow") && !ELoot.data.settings[:sell_container].include?(container_name)
         ELoot.data.settings[:sell_container] << container_name
       end
