@@ -4188,7 +4188,7 @@ module ELoot # Gem and Reagent hording
         Horde.check_jar(thing_name)
 
         # Need to refresh the locker contents because lockers are special
-          ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
+        ELoot.get_command("look in ##{ELoot.data.stash.id}", /<container id='.*?' title=/, silent: true, quiet: true)
 
         Inventory.store_item(ELoot.data.stash, jar)
       end
